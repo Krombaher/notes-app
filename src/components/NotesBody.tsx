@@ -8,17 +8,31 @@ type NotesBodyPropsType = {
     id: string
     body: string
     setNotes: (notes: DataNotesType[]) => void
+    tags:string[]
 }
+
 
 export const NotesBody = (props: NotesBodyPropsType) => {
     const [editMode, setEditMode] = useState(true)
     const [title, setTitle] = useState(props.body)
 
-    const activateEditMode = () => {
+    // const allTags = props.dataNotes.filter(el => el.id === props.id)[0].tags
 
+    const words = title.split(' ').map(word => {
+        return (
+            <span style={ props.tags.includes(word) ? {color: "blue"} : {}}> {word }</span>
+            //allTags.includes(word) ? <span style={{color: 'blue'}}>{word}</span> : <span>{word}</span>
+        )
+    })
+
+    console.log(words)
+
+    const activateEditMode = () => {
         let tags = title.split(' ').filter(el => {
             if (el['0'] === '#') {
-                return el
+              return (
+                  el
+              )
             }
         })
 
@@ -31,10 +45,8 @@ export const NotesBody = (props: NotesBodyPropsType) => {
                     )
                 })))
             .catch(res => console.log(res))
-
         setEditMode(false)
     }
-
 
     const activateViewMode = () => {
         setEditMode(true)
@@ -46,10 +58,24 @@ export const NotesBody = (props: NotesBodyPropsType) => {
 
     return (
         <div className={s.bodyBlock}>
+
             {
                 editMode ?
-                    <textarea value={title} onChange={onChangeTitleHandler} onBlur={activateEditMode}/> :
-                    <p className={s.notesBodySpan} onClick={activateViewMode}>{title}</p>
+                    <textarea
+                        value={title}
+                        onChange={onChangeTitleHandler}
+                        onBlur={activateEditMode}
+                    />
+                    :
+                    <p
+                        id={'myDiv'}
+                        className={s.notesBodySpan}
+                        onClick={activateViewMode}
+                    >
+                        {
+                            words
+                        }
+                    </p>
             }
         </div>
     )

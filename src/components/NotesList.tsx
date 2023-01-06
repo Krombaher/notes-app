@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Notes} from "./Notes";
 import s from '../scss/NotesList.module.scss'
 import {DataNotesType} from "../App";
@@ -9,6 +9,9 @@ export type NotesListPropsType = {
 }
 
 export const NotesList = (props: NotesListPropsType) => {
+
+    const [open, setOPen] = useState()
+
     return (
         <div className={s.notesList}>
             <Notes

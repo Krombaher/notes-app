@@ -3,6 +3,7 @@ import s from './scss/App.module.scss'
 import {NotesHeader} from "./components/NotesHeader";
 import {NotesList} from "./components/NotesList";
 import {productAPI} from "./Api/Api";
+import {FilterTagsBtn} from "./components/FilterTagsBtn";
 
 export type DataNotesType = {
     id: string
@@ -19,18 +20,27 @@ export type DataType = {
 function App() {
     const [notes, setNotes] = useState<DataNotesType[]>([])
 
+    useEffect(() => {
+        productAPI.getCatalog().then(res=> {
+            setNotes(res)
+        })
+    }, [])
+
+    //filter
+
+    const filterNotes = (filterTags:string) => {
+        setNotes(notes.filter(el => el.tags.length !== 0)
+            .filter(el => el.tags.filter(tags => tags === filterTags).length !== 0))
+    }
+
     const addNotes = (title: string) => {
         let newNotes = {title: title, body: '', tags: []}
-        productAPI.postCatalog(newNotes).then(response => {
-            setNotes([...notes, response])
+        productAPI.postCatalog(newNotes).then(res => {
+            setNotes([...notes, res])
         })
     }
 
-    useEffect(() => {
-        productAPI.getCatalog().then(response => {
-            setNotes(response)
-        })
-    }, [])
+
 
     return (
         <div className={s.container}>
@@ -38,6 +48,10 @@ function App() {
             <NotesList
                 dataNotes={notes}
                 setNotes={setNotes}
+            />
+            <FilterTagsBtn
+                dataNotes={notes}
+                filterNotes={filterNotes}
             />
         </div>
     );
