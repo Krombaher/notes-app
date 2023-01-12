@@ -1,22 +1,25 @@
 import axios from "axios";
-import {DataType} from "../App";
+import {DataPostType} from "../Types/Types";
 
 const instance = axios.create({
-    baseURL: 'https://637bdcd96f4024eac219cbef.mockapi.io/'
+    baseURL: 'https://63bee855f5cfc0949b648b6f.mockapi.io/'
 })
 
-export const productAPI = {
-    getCatalog() {
+export const notesAPI = {
+    getNotes() {
         return instance.get('notes')
             .then(response => response.data)
     },
 
-    postCatalog(obj: DataType) {
+    addNote(obj: DataPostType) {
         return instance.post('notes', obj)
-            .then(response => response.data)
+            .then(response => {
+                console.log(response)
+                return response.data
+            })
     },
 
-    putBodyCatalog(id: string, body:string, tags:string[]) {
+    changeBodyNote(id: string, body:string, tags:string[]) {
         return instance.put(`notes/${id}`, { body, tags })
             .then(response => response.data)
             .catch(err => {
@@ -24,7 +27,7 @@ export const productAPI = {
             })
     },
 
-    deleteCatalog(id: string) {
+    removeNote(id: string) {
         return instance.delete(`notes/${id}`)
             .then(response => {
                 console.log(response)

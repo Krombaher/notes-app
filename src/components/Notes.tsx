@@ -1,28 +1,23 @@
-import React, {useState} from "react";
+import React from "react";
 import s from "../scss/Notes.module.scss";
 import {Tags} from "./Tags";
 import {NotesBody} from "./NotesBody";
-import {DataNotesType} from "../App";
 import {v1} from "uuid";
-import {productAPI} from "../Api/Api";
+import {useSelector} from "react-redux";
+import {AppStateType} from "../redux/Redux-store";
+import {DataNotesType} from "../Types/Types";
+import {useAppDispatch} from "../hooks/react-redux-hooks";
+import {removeNoteTC} from "../redux/AppNoteReducer";
 
-export type NotesPropsType = {
-    dataNotes: DataNotesType[]
-    setNotes: (notes: DataNotesType[]) => void
-}
+export const Notes = () => {
+    const {dataNotes} = useSelector<AppStateType, DataNotesType>(state => state.dataNotes)
+    const dispatch = useAppDispatch()
 
-export const Notes = (props: NotesPropsType) => {
+    const removeNotes = (id: string) => {
+        dispatch(removeNoteTC(id))
+    }
 
-    const notesItems = props.dataNotes.map(el => {
-
-        const removeNotes = (id: string) => {
-            productAPI.deleteCatalog(el.id)
-                .then(res => console.log(res))
-                .then(res => props.setNotes(props.dataNotes
-                    .filter(el => el.id !== id)))
-                .catch(res => console.log(res))
-        }
-
+    const notesItems = dataNotes.map(el => {
         return (
             <>
                 <div key={el.id} className={s.notes}>
@@ -30,10 +25,8 @@ export const Notes = (props: NotesPropsType) => {
                     <h3>{el.title}</h3>
                     <NotesBody
                         tags={el.tags}
-                        dataNotes={props.dataNotes}
                         id={el.id}
                         body={el.body}
-                        setNotes={props.setNotes}
                     />
                     <div>
                         {

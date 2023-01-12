@@ -1,58 +1,35 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import s from './scss/App.module.scss'
 import {NotesHeader} from "./components/NotesHeader";
 import {NotesList} from "./components/NotesList";
-import {productAPI} from "./Api/Api";
+import {useAppDispatch} from "./hooks/react-redux-hooks";
+import {getNotesDataAC, getNotesDataTC, setTagsTC} from "./redux/AppNoteReducer";
 import {FilterTagsBtn} from "./components/FilterTagsBtn";
-
-export type DataNotesType = {
-    id: string
-    title: string
-    body: string
-    tags: string[]
-}
-
-export type DataType = {
-    title: string
-    body: string
-}
+import {useSelector} from "react-redux";
+import {AppStateType} from "./redux/Redux-store";
+import {DataNotesType} from "./Types/Types";
 
 function App() {
-    const [notes, setNotes] = useState<DataNotesType[]>([])
-
+    const {dataNotes} = useSelector<AppStateType, DataNotesType>(state => state.dataNotes)
+    const dispatch = useAppDispatch()
     useEffect(() => {
-        productAPI.getCatalog().then(res=> {
-            setNotes(res)
-        })
+        dispatch(getNotesDataTC())
     }, [])
 
     //filter
 
     const filterNotes = (filterTags:string) => {
-        setNotes(notes.filter(el => el.tags.length !== 0)
-            .filter(el => el.tags.filter(tags => tags === filterTags).length !== 0))
+        const filteredNotes = dataNotes.filter(el => el.tags.length !== 0)
+            .filter(el => el.tags.filter(tags => tags === filterTags).length !== 0)
+
+        dispatch(getNotesDataAC(filteredNotes))
     }
-
-    const addNotes = (title: string) => {
-        let newNotes = {title: title, body: '', tags: []}
-        productAPI.postCatalog(newNotes).then(res => {
-            setNotes([...notes, res])
-        })
-    }
-
-
 
     return (
         <div className={s.container}>
-            <NotesHeader addNotes={addNotes} dataNotes={notes}/>
-            <NotesList
-                dataNotes={notes}
-                setNotes={setNotes}
-            />
-            <FilterTagsBtn
-                dataNotes={notes}
-                filterNotes={filterNotes}
-            />
+            <NotesHeader />
+            <NotesList/>
+            <FilterTagsBtn filterNotes={filterNotes}/>
         </div>
     );
 }

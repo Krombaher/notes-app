@@ -1,41 +1,25 @@
 import React, {ChangeEvent, useState} from "react";
 import s from '../scss/App.module.scss'
-import {DataNotesType} from "../App";
+import {useAppDispatch} from "../hooks/react-redux-hooks";
+import {addNoteTC} from "../redux/AppNoteReducer";
 
-export type NotesHeaderPropsType = {
-    addNotes: (title: string) => void
-    dataNotes: DataNotesType[]
-
-}
-
-export const NotesHeader = (props: NotesHeaderPropsType) => {
+export const NotesHeader = () => {
     const [text, setText] = useState('')
+    const dispatch = useAppDispatch()
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setText(e.currentTarget.value)
     }
 
-    // const tags = props.dataNotes.map(el => el.tags)
+    const addNotes = () => {
+        dispatch(addNoteTC(text))
+    }
 
     return (
         <div className={s.header}>
             <h3>Notes</h3>
             <input onChange={onChangeHandler}/>
-            <button onClick={() => props.addNotes(text)}>Add</button>
-
-
-            {/*{*/}
-            {/*    tags.map(el => {*/}
-            {/*        return (*/}
-            {/*            el.map(el => {*/}
-            {/*                return (*/}
-            {/*                    <button>{el}</button>*/}
-            {/*                )*/}
-            {/*            })*/}
-            {/*        )*/}
-            {/*    })*/}
-            {/*}*/}
-
+            <button onClick={addNotes}>Add</button>
         </div>
     )
 }
