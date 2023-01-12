@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useState} from "react";
 import s from "../scss/Notes.module.scss";
 import {useAppDispatch} from "../hooks/react-redux-hooks";
-import {changeBodyNoteTC} from "../redux/AppNoteReducer";
+import {changeBodyNoteTC} from "../redux/appNoteReducer";
 
 type NotesBodyPropsType = {
     id: string
@@ -17,11 +17,10 @@ export const NotesBody = (props: NotesBodyPropsType) => {
     const spanStyle = (word: string) => {
         return props.tags.includes(word) ? {color: "dodgerblue"} : {}
     }
-    // const allTags = props.dataNotes.filter(el => el.id === props.id)[0].tags
+
     const words = title.split(' ').map(word => {
         return (
             <span style={spanStyle(word)}> {word}</span>
-            //allTags.includes(word) ? <span style={{color: 'blue'}}>{word}</span> : <span>{word}</span>
         )
     })
 
@@ -47,13 +46,10 @@ export const NotesBody = (props: NotesBodyPropsType) => {
             {
                 editMode ?
                     <p
-                        id={'myDiv'}
                         className={s.notesBodySpan}
                         onClick={activateEditMode}
                     >
-                        {
-                            words
-                        }
+                        {words}
                     </p>
                     :
                     <textarea
@@ -61,7 +57,6 @@ export const NotesBody = (props: NotesBodyPropsType) => {
                         onChange={onChangeTitleHandler}
                         onBlur={activateViewMode}
                     />
-
             }
         </div>
     )

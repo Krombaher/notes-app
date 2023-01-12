@@ -1,7 +1,7 @@
-import {DataNotesType, NotesType} from "../Types/Types";
+import {DataNotesType, NotesType} from "../types/types";
 import {Dispatch} from "react";
-import {notesAPI} from "../Api/NotesApi";
-import {AppStateType} from "./Redux-store";
+import {notesApi} from "../api/notesApi";
+import {AppStateType} from "./redux-store";
 
 export type ActionType = GetNotesDataAT | AddNoteAT | ChangeBodyNoteAT | RemoveNoteAT | SetTagsAC
 
@@ -68,44 +68,36 @@ export const removeNoteAC = (id: string) => {
 
 //Thunk
 export const getNotesDataTC = () => (dispatch: Dispatch<ActionType>) => {
-    notesAPI.getNotes().then(res => {
-        let tags = new Set()
-        res.map((el: NotesType) => el.tags.map(tag => tags.add(tag)))
-
-        //@ts-ignore
-        let allTags: string[] = Array.from(tags)
-        console.log(tags, 'tags')
-
+    notesApi.getNotes().then(res => {
         dispatch(getNotesDataAC(res))
     })
 }
 
 export const setTagsTC = () => (dispatch: Dispatch<ActionType>, getState: () => AppStateType) => {
     const notes = getState().dataNotes.dataNotes
-    let tags = new Set()
+    let tags = new Set<string>()
     notes.map((el: NotesType) => el.tags.map(tag => tags.add(tag)))
-    //@ts-ignore
-    let allTags: string[] = Array.from(tags)
+
+    let allTags = Array.from(tags)
     dispatch(setTagsAC(allTags))
 }
 
 export const addNoteTC = (title: string) => (dispatch: Dispatch<ActionType>) => {
-    let newNote = {title: title, body: '', tags: []}
-    notesAPI.addNote(newNote).then(res => {
+    let newNote = {data: new Date().toLocaleDateString(), title: title, body: '', tags: []}
+    notesApi.addNote(newNote).then(res => {
         dispatch(addNoteAC(res))
     })
 }
 
 export const changeBodyNoteTC = (id: string, title: string, tags: string[]) => (dispatch: Dispatch<ActionType>) => {
-    notesAPI.changeBodyNote(id, title, tags)
+    notesApi.changeBodyNote(id, title, tags)
         .then(res => {
             dispatch(changeBodyNoteAC(res))
         })
-
 }
 
 export const removeNoteTC = (id: string) => (dispatch: Dispatch<ActionType>) => {
-    notesAPI.removeNote(id)
+    notesApi.removeNote(id)
         .then(res => {
             dispatch(removeNoteAC(id))
         })

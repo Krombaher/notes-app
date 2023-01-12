@@ -5,9 +5,10 @@
 
 .filterBtnBlock {
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
 
   button {
+    margin: 5px;
     border: none;
     color: white;
     width: 50px;

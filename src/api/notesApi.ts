@@ -1,11 +1,11 @@
 import axios from "axios";
-import {DataPostType} from "../Types/Types";
+import {DataPostType} from "../types/types";
 
-const instance = axios.create({
+export const instance = axios.create({
     baseURL: 'https://63bee855f5cfc0949b648b6f.mockapi.io/'
 })
 
-export const notesAPI = {
+export const notesApi = {
     getNotes() {
         return instance.get('notes')
             .then(response => response.data)

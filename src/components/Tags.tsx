@@ -5,6 +5,7 @@ export type TagsPropsTYpe = {
 }
 
 export const Tags = (props: TagsPropsTYpe) => {
+
     return (
         <span>{props.tags}</span>
     )

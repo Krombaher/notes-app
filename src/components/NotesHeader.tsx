@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useState} from "react";
 import s from '../scss/App.module.scss'
 import {useAppDispatch} from "../hooks/react-redux-hooks";
-import {addNoteTC} from "../redux/AppNoteReducer";
+import {addNoteTC} from "../redux/appNoteReducer";
 
 export const NotesHeader = () => {
     const [text, setText] = useState('')
@@ -12,7 +12,11 @@ export const NotesHeader = () => {
     }
 
     const addNotes = () => {
-        dispatch(addNoteTC(text))
+        if(text.trim() !== '') {
+            dispatch(addNoteTC(text))
+        } else {
+            alert('Title is required')
+        }
     }
 
     return (

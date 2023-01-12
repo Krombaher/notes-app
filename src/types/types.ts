@@ -1,7 +1,7 @@
 //type
-
 export type NotesType = {
     id: string
+    data:string
     title: string
     body: string
     tags: string[]

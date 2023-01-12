@@ -1,5 +1,5 @@
 import {applyMiddleware, combineReducers, legacy_createStore} from "redux";
-import {appNoteReducer} from "./AppNoteReducer";
+import {appNoteReducer} from "./appNoteReducer";
 import thunk from "redux-thunk";
 
 export let rootReducer = combineReducers({

@@ -4,10 +4,10 @@ import {Tags} from "./Tags";
 import {NotesBody} from "./NotesBody";
 import {v1} from "uuid";
 import {useSelector} from "react-redux";
-import {AppStateType} from "../redux/Redux-store";
-import {DataNotesType} from "../Types/Types";
+import {AppStateType} from "../redux/redux-store";
+import {DataNotesType} from "../types/types";
 import {useAppDispatch} from "../hooks/react-redux-hooks";
-import {removeNoteTC} from "../redux/AppNoteReducer";
+import {removeNoteTC} from "../redux/appNoteReducer";
 
 export const Notes = () => {
     const {dataNotes} = useSelector<AppStateType, DataNotesType>(state => state.dataNotes)
@@ -23,6 +23,7 @@ export const Notes = () => {
                 <div key={el.id} className={s.notes}>
                     <button onClick={() => removeNotes(el.id)}>X</button>
                     <h3>{el.title}</h3>
+                    <span>{el.data}</span>
                     <NotesBody
                         tags={el.tags}
                         id={el.id}
